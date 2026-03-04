@@ -21,7 +21,7 @@ import express from "express";
 
 import pingRouter from "./routes/ping.router.js";
 import productsRouter from "./routes/products.router.js"
-
+import categoriesRouter from "./routes/categories.router.js"
 
 
 
@@ -31,68 +31,7 @@ app.use(express.json());
 
 app.use(pingRouter);
 app.use("/products", productsRouter);
-// app.use(categoriesRouter);
-
-
-
-const categories = [
-  { id: 1, name: "Electro" },
-  { id: 2, name: "mecanic" },
-];
-
-
-
-
-
-
-
-app.get("/categories", (req, res) => {
-  res.json(categories);
-});
-
-app.get("/categories/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-
-  if (isNaN(id)) {
-    return res.status(400).json({ error: "Invalid category" });
-  }
-
-  const category = categories.find((cat) => cat.id == id);
-  if (!category) {
-    return res.status(404).json({ error: "category not found" });
-  }
-  res.json(category);
-});
-
-app.post("/categories", (req, res) => {
-   
-
-    
-    if (!req.body.name){
-        return res.status(422).json({ error: "name is required" });
-    }
-// ---------
-    // if (req.body.name == undefined){
-    //     return res.status(422).json({ error: "name is required" });
-    // }
-    // if (req.body.name == ""){
-    //     return res.status(422).json({ error: "name is required" });
-    // }
-// --------
-    //   if (req.body.name == undefined || req.body.name == ""){
-    //     return res.status(422).json({ error: "name is required" });
-    // }
-
-    const newCategory = {
-        id:Date.now(),
-        name: req.body.name,
-        price: req.body.price,
-    };
-    categories.push(newCategory);
-
-    res.status(201).json(newCategory);
-});
-
+app.use("/categories", categoriesRouter);
 
 
 
