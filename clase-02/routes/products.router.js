@@ -2,53 +2,19 @@ import { Router } from "express";
 
 const router = Router();
 
+import {
+  createProduct,
+  getProductById,
+  getProducts,
+} from "../controllers/products.controller.js";
+
 const products = [
   { id: 1, name: "Laptop", price: 1200 },
   { id: 2, name: "Mouse", price: 20 },
 ];
 
-
-router.get("/", (req, res) => {
-  res.json(products);
-});
-
-router.get("/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  // console.log(typeof req.params.id, typeof id, isNaN(id));
-
-  if (isNaN(id)) {
-    return res.status(400).json({ error: "invalid id" });
-  }
-
-  const product = products.find((p) => p.id == id);
-
-  if (!product) {
-    return res.status(404).json({ error: "Product not found" });
-  }
-
-  res.json(product);
-});
-
-router.post("/", (req, res) => {
-    // console.log(req.body);
-  if (
-    req.body.stock == undefined ||
-    isNaN(req.body.stock) ||
-    req.body.stock < 0
-  ){
-     return res.status(422).json({ error: "Invalid stock" })
-  };
-    // console.log(Date.now())
-    const newProduct = {
-        id:Date.now(),
-        name: req.body.name,
-        price: req.body.price,
-        stock: req.body.stock,
-    };
-    products.push(newProduct);
-
-    res.status(201).json(newProduct);
-});
-
+router.get("/", getProducts);
+router.get("/:id", getProductById);
+router.post("/", createProduct);
 
 export default router;
